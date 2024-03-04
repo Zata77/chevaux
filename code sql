@@ -1,0 +1,212 @@
+mysql> create database chevaux;
+Query OK, 1 row affected (0.02 sec)
+
+mysql> use chevaux;
+Database changed
+mysql>  create table personne(
+    -> id_personne int primary key,
+    -> nom varchar(15),
+    -> prenom varchar(15),
+    -> adresse varchar(45),
+    -> telephone varchar(15),
+    -> fonction enum('directeur','secrétaire','éleveur','comptable','propriétaire','entretien','éleveur-propriétaire'),
+    -> id_Encadrant int);
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> create table cheval(
+    -> id_cheval int primary key,
+    -> nom varchar(10),
+    -> couleur varchar(10),
+    -> no_tatouage inte unique,
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'inte unique,' at line 5
+mysql> create table cheval(
+    -> id_cheval int primary key,
+    -> nom varchar(10),
+    -> couleur varchar(10),
+    -> no_tatouage int unique,
+    -> id_female int,
+    -> id_male int,
+    -> id_personne int,
+    -> id-race int,
+    -> id_proprio int);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-race int,
+id_proprio int)' at line 9
+mysql> create table cheval(
+    -> id_cheval int primary key,
+    -> nom varchar(10),
+    -> couleur varchar(10),
+    -> no_tatouage int unique,
+    -> id_female int,
+    -> id_male int,
+    -> id_personne int,
+    -> id-race int,
+    -> id_proprio int);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '-race int,
+id_proprio int)' at line 9
+mysql> create table cheval(
+    -> id_cheval int primary key,
+    -> nom varchar(10),
+    -> couleur varchar(10),
+    -> no_tatouage int unique,
+    -> id_female int,
+    -> id_male int,
+    -> id_personne int,
+    -> id_race int,
+    -> id_proprio int);
+Query OK, 0 rows affected (0.11 sec)
+
+mysql> create table race(
+    -> id_race int primary key,
+    -> poid_type varchar(10),
+    -> taille_type varchar(10));
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> create table concour(
+    -> nom varchar(10) primary key,
+    -> no_participant int);
+Query OK, 0 rows affected (0.17 sec)
+
+mysql> create table cheval_concour(
+    -> id_cheval int,
+    -> nom varchar(10),
+    -> place int);
+Query OK, 0 rows affected (0.06 sec)
+
+mysql> create table transaction(
+    -> id_transaction int primary key,
+    -> mois date,
+    -> poid decimal,
+    -> taille decimal,
+    -> id_cheval int);
+Query OK, 0 rows affected (0.09 sec)
+
+mysql> alter table transaction
+    -> drop mois , poid , taille , id_cheval ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'poid , taille , id_cheval' at line 2
+mysql> alter table transaction
+    -> drop mois ;
+Query OK, 0 rows affected (0.11 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table transaction
+    -> drop poid ;
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table transaction
+    -> drop taille ;
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table transaction
+    -> drop id_cheval ;
+Query OK, 0 rows affected (0.13 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc transaction;
++----------------+------+------+-----+---------+-------+
+| Field          | Type | Null | Key | Default | Extra |
++----------------+------+------+-----+---------+-------+
+| id_transaction | int  | NO   | PRI | NULL    |       |
++----------------+------+------+-----+---------+-------+
+1 row in set (0.00 sec)
+
+mysql> alter table transaction
+    -> add prix decimal ,
+    -> add id_cheval int,
+    -> add id_vendeur int,
+    -> add id_acheteur int;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> desc transaction;
++----------------+---------------+------+-----+---------+-------+
+| Field          | Type          | Null | Key | Default | Extra |
++----------------+---------------+------+-----+---------+-------+
+| id_transaction | int           | NO   | PRI | NULL    |       |
+| prix           | decimal(10,0) | YES  |     | NULL    |       |
+| id_cheval      | int           | YES  |     | NULL    |       |
+| id_vendeur     | int           | YES  |     | NULL    |       |
+| id_acheteur    | int           | YES  |     | NULL    |       |
++----------------+---------------+------+-----+---------+-------+
+5 rows in set (0.01 sec)
+
+mysql> create table evolution(
+    -> id_evolu int primary key ,
+    -> mois date,
+    -> poid decimal,
+    -> taille decimal,
+    -> id_cheval int);
+Query OK, 0 rows affected (0.07 sec)
+
+mysql> alter table evolution
+    -> add foreign key(id_cheval) references cheval(id_cheval);
+Query OK, 0 rows affected (0.21 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table transaction
+    -> add foreign key (id_cheval) reference cheval(id_cheval),
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'reference cheval(id_cheval),' at line 2
+mysql> alter table transaction
+    -> add foreign key (id_cheval) references cheval(id_cheval),
+    -> add foreign key (id_vendeur) references personne(id_vendeur);
+ERROR 3734 (HY000): Failed to add the foreign key constraint. Missing column 'id_vendeur' for constraint 'transaction_ibfk_2' in the referenced table 'personne'
+mysql> alter table transaction
+    -> add foreign key (id_cheval) references cheval(id_cheval),
+    -> add foreign key (id_vendeur) references personne(id_personne),
+    -> add foreign key (id_acheteur) references personne(id_personne);
+Query OK, 0 rows affected (0.22 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table cheval_concour
+    -> add primary key (id_cheval,nom);
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table cheval_concour
+    -> add foreign key (id_cheval) references cheval(id_cheval),
+    -> add foreign key (nom) references concour(nom);
+Query OK, 0 rows affected (0.17 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table trasaction
+    -> add foreign key (nom) references concour(nom);
+ERROR 1146 (42S02): Table 'chevaux.trasaction' doesn't exist
+mysql> desc transaction
+    -> ;
++----------------+---------------+------+-----+---------+-------+
+| Field          | Type          | Null | Key | Default | Extra |
++----------------+---------------+------+-----+---------+-------+
+| id_transaction | int           | NO   | PRI | NULL    |       |
+| prix           | decimal(10,0) | YES  |     | NULL    |       |
+| id_cheval      | int           | YES  | MUL | NULL    |       |
+| id_vendeur     | int           | YES  | MUL | NULL    |       |
+| id_acheteur    | int           | YES  | MUL | NULL    |       |
++----------------+---------------+------+-----+---------+-------+
+5 rows in set (0.00 sec)
+
+mysql> alter table concour
+    -> add index nom_index(nom);
+Query OK, 0 rows affected (0.06 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table concour
+    -> add foreign key(nom) references concour(nom);
+Query OK, 0 rows affected (0.30 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table cheval
+    -> add foreign key(id_personne) references personne(id_personne),
+    -> add foreign key(id_male) references cheval(id_cheval),
+    -> add foreign key(id_female) references cheval(id_cheval),
+    -> add foreign key(id_race) references race(id_race),
+    -> add foreign key(id_proprio) references personne(id_personne);
+Query OK, 0 rows affected (0.25 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table personne
+    -> add foreign key(id_encadrant) references personne(id_personne);
+Query OK, 0 rows affected (1.36 sec)
+Records: 0  Duplicates: 0  Warnings: 0
